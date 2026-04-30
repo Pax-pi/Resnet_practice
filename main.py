@@ -11,6 +11,7 @@ num_epochs = 12
 featurename = 'patientId'
 labelname = 'Target'
 batch_size = 128
+num_workers = 4
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 label_sheet, img_dir = data_setup(env='colab', data_type='competition', kaggle_dir='rsna-pneumonia-detection-challenge', df_dir='stage_2_train_labels.csv', img_dir='stage_2_train_images')
@@ -22,8 +23,8 @@ train, validation = train_test_split(df_unique, random_state=42, stratify=df_uni
 train_dataset = ResNetDataset(df=train, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True)
 val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True)
 
-train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True)
-val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True)
+train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True)
+val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True)
 
 model, optimizer, scheduler, criterion = setup_trainer(device=device)
 
