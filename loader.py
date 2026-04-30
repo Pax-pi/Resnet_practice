@@ -38,7 +38,7 @@ def data_setup(env: Literal['colab', 'kaggle', 'other'], data_type: Literal['com
                 with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                     zip_ref.extractall('/content/data')
                 os.remove(zip_path)
-        target_dir = Path('/content/data') / kaggle_dir
+        target_dir = Path('/content/data')
     elif env == 'kaggle':
         target_dir = Path('/kaggle/input')
         if data_type == 'dataset':
