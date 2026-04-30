@@ -30,15 +30,15 @@ def data_setup(env: Literal['colab', 'kaggle', 'other'], data_type: Literal['com
         api = KaggleApi()
         api.authenticate()
         if data_type == 'dataset':
-            api.dataset_download_files(kaggle_dir, path='./data', unzip=True)
+            api.dataset_download_files(kaggle_dir, path='/content/data', unzip=True)
         elif data_type == 'competition':
-            api.competition_download_files(kaggle_dir, path='./data', quiet=False)
-            zip_path = Path('./data') / f'{kaggle_dir}.zip'
+            api.competition_download_files(kaggle_dir, path='/content/data', quiet=False)
+            zip_path = Path('/content/data') / f'{kaggle_dir}.zip'
             if os.path.exists(zip_path):
                 with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                    zip_ref.extractall('./data')
+                    zip_ref.extractall('/content/data')
                 os.remove(zip_path)
-        target_dir = Path('./data') / kaggle_dir
+        target_dir = Path('/content/data') / kaggle_dir
     elif env == 'kaggle':
         target_dir = Path('/kaggle/input')
         if data_type == 'dataset':
