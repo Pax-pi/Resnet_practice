@@ -38,8 +38,8 @@ for epoch in range(num_epochs):
     
     val_dict = evaluate(model=model, dataloader=val_loader, criterion=criterion, device=device)
     val_loss = val_dict['val_loss']
-    val_accuracy = val_dict['val_accuracy']
-    val_recall = val_dict['val_recall']
+    val_accuracy = val_dict['val_accuracy'] * 100
+    val_recall = val_dict['val_recall'] * 100
     
     epoch_time = time.time() - start_time
 
