@@ -4,7 +4,7 @@ import pandas as pd
 import os
 import zipfile
 
-def data_setup(env: Literal['colab', 'kaggle', 'other'], data_type: Literal['competition', 'dataset'], kaggle_dir: str, df_dir: str, img_dir: str):
+def data_setup(env: Literal['colab', 'kaggle', 'other'], data_type: Literal['competition', 'dataset'], kaggle_dir: str, df_dir: str, img_dir: str)-> tuple[pd.DataFrame, Path]:
     '''Function for set up the file for training'''
     if env not in ['colab', 'kaggle', 'other']:
         raise ValueError("Wrong enviroment keyword. Please choose from 'colab', 'kaggle', or 'other'.")

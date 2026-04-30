@@ -11,7 +11,7 @@ from matplotlib.image import imread
 class ResNetDataset(Dataset):
     '''Dataset class for ResNet model, a simple one'''
     
-    def __init__(self, df: pd.DataFrame, image_dir: Path, featurename: str, labelname: str, transform: Callable[[Any], Any] | None = None, dcm: bool = False, grey: bool = False):
+    def __init__(self, df: pd.DataFrame, image_dir: Path, featurename: str, labelname: str, transform: Callable[[Any], Any] | None = None, dcm: bool = False, grey: bool = False) -> None:
         '''Initialize an instance'''
         self.df = df.reset_index(drop=True)
         self.image_dir = image_dir
@@ -21,11 +21,11 @@ class ResNetDataset(Dataset):
         self.dcm = dcm
         self.grey = grey
 
-    def __len__(self):
+    def __len__(self) -> int:
         '''Return the length'''
         return len(self.df)
     
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> tuple[torch.Tensor, torch.Tensor]:
         '''Get item'''
         file_id = self.df.loc[idx, self.featurename]
         target = self.df.loc[idx, self.labelname]
