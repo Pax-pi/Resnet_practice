@@ -20,8 +20,8 @@ df_unique = label_sheet.groupby(featurename, as_index=False)[labelname].max()
 
 train, validation = train_test_split(df_unique, random_state=42, stratify=df_unique[labelname])
 
-train_dataset = ResNetDataset(df=train, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True)
-val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True)
+train_dataset = ResNetDataset(df=train, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True)
+val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True)
 
 train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True)
 val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True)
