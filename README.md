@@ -16,7 +16,7 @@ The pipeline is strictly modularized to ensure reproducibility and ease of deplo
 ├── main.py                
 └── README.md
 ```
-## 🚀 Quick Start (Reproducibility) [Under Reconstruction]
+## 🚀 Quick Start (Reproducibility)
 To execute the pipeline in a cloud environment (e.g., Google Colab), simply use the provided runner:
 1. Open `notebooks/colab_runner.ipynb` in Colab. 
 2. The runner will automatically clone this repository, execute `setup_data.sh` to fetch the 4GB dataset, and trigger `main.py`.
@@ -30,8 +30,9 @@ In the current MVP stage (Phase 1), the model achieves near-zero training loss w
 3. **Confounding Artifacts (Shortcut Learning):** Unlike curated pediatric pneumonia datasets, the RSNA clinical dataset contains numerous clinical artifacts (e.g., chest tubes, portable X-ray markers). Without aggressive regularization and transformations, ResNet-18 latches onto these confounding variables as shortcuts for classification.
 
 **Next Immediate Actions (Phase 2):**
-- [ ] Implement a robust `setup_data.sh` to fully automate Kaggle API downloads and decouple data preparation from the Python runtime.
+- [x] Implement a robust `setup_data.sh` to fully automate Kaggle API downloads and decouple data preparation from the Python runtime.
+- [ ] Include a `seed_everything` function in `main.py` to ensure reproducibility.
+- [ ] Add argparse for setting parameters from the outside.
 - [ ] Re-integrate data augmentations (via `Albumentations`) into `dataset.py` to disrupt pixel-level memorization.
 - [ ] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.
 - [ ] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
-- [ ] Include a `seed_everything` function in `main.py` to ensure reproducibility.

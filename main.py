@@ -1,11 +1,13 @@
-from loader import data_setup
+#from loader import data_setup
 from dataset import ResNetDataset
 from model import setup_trainer
 from train import train_one_epoch, evaluate
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
+from pathlib import Path
 import torch
 import time
+import pandas as pd
 
 num_epochs = 12
 featurename = 'patientId'
@@ -14,8 +16,11 @@ batch_size = 128
 num_workers = 4
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-label_sheet, img_dir = data_setup(env='colab', data_type='competition', kaggle_dir='rsna-pneumonia-detection-challenge', df_dir='stage_2_train_labels.csv', img_dir='stage_2_train_images')
+#legacy code, do not use
+#label_sheet, img_dir = data_setup(env='colab', data_type='competition', kaggle_dir='rsna-pneumonia-detection-challenge', df_dir='stage_2_train_labels.csv', img_dir='stage_2_train_images')
 
+label_sheet = pd.read_csv('../data/rsna/stage_2_train_labels.csv')
+img_dir = Path('../data/rsna/stage_2_train_images')
 df_unique = label_sheet.groupby(featurename, as_index=False)[labelname].max()
 
 train, validation = train_test_split(df_unique, random_state=42, stratify=df_unique[labelname])

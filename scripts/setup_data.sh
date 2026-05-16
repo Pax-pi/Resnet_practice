@@ -16,6 +16,7 @@ else
 fi
 
 # step 3, use kaggle to download the dataset
+cd ..
 mkdir -p data/rsna
 cd data/rsna
 kaggle competitions download -c rsna-pneumonia-detection-challenge
