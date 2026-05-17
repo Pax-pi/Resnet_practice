@@ -14,6 +14,7 @@ The pipeline is strictly modularized to ensure reproducibility and ease of deplo
 ├── model.py                
 ├── train.py                
 ├── main.py                
+├── utils.py
 └── README.md
 ```
 ## 🚀 Quick Start (Reproducibility)
@@ -31,7 +32,7 @@ In the current MVP stage (Phase 1), the model achieves near-zero training loss w
 
 **Next Immediate Actions (Phase 2):**
 - [x] Implement a robust `setup_data.sh` to fully automate Kaggle API downloads and decouple data preparation from the Python runtime.
-- [ ] Include a `seed_everything` function in `main.py` to ensure reproducibility.
+- [x] Include a `seed_everything` function in `main.py` to ensure reproducibility.
 - [ ] Add argparse for setting parameters from the outside.
 - [ ] Re-integrate data augmentations (via `Albumentations`) into `dataset.py` to disrupt pixel-level memorization.
 - [ ] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.

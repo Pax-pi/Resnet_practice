@@ -5,6 +5,7 @@ from train import train_one_epoch, evaluate
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from pathlib import Path
+from utils import seed_everything, seed_worker
 import torch
 import time
 import pandas as pd
@@ -15,9 +16,14 @@ labelname = 'Target'
 batch_size = 128
 num_workers = 4
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+global_seed = 42
 
 #legacy code, do not use
 #label_sheet, img_dir = data_setup(env='colab', data_type='competition', kaggle_dir='rsna-pneumonia-detection-challenge', df_dir='stage_2_train_labels.csv', img_dir='stage_2_train_images')
+
+seed_everything(global_seed)
+g = torch.Generator()
+g.manual_seed(global_seed)
 
 label_sheet = pd.read_csv('../data/rsna/stage_2_train_labels.csv')
 img_dir = Path('../data/rsna/stage_2_train_images')
@@ -28,8 +34,8 @@ train, validation = train_test_split(df_unique, random_state=42, stratify=df_uni
 train_dataset = ResNetDataset(df=train, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True)
 val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True)
 
-train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True)
-val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True)
+train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True, worker_init_fn=seed_worker, generator=g)
+val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True,  worker_init_fn=seed_worker)
 
 model, optimizer, scheduler, criterion = setup_trainer(device=device)
 
