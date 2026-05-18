@@ -13,22 +13,21 @@ class ResNetDataset(Dataset):
     
     def __init__(self, df: pd.DataFrame, image_dir: Path, featurename: str, labelname: str, transform: Callable[[Any], Any] | None = None, dcm: bool = False, grey: bool = False) -> None:
         '''Initialize an instance'''
-        self.df = df.reset_index(drop=True)
+        self.file = df[featurename].values
+        self.label = df[labelname].values
         self.image_dir = image_dir
         self.transform = transform
-        self.featurename = featurename
-        self.labelname = labelname
         self.dcm = dcm
         self.grey = grey
 
     def __len__(self) -> int:
         '''Return the length'''
-        return len(self.df)
+        return len(self.file)
     
     def __getitem__(self, idx) -> tuple[torch.Tensor, torch.Tensor]:
         '''Get item'''
-        file_id = self.df.loc[idx, self.featurename]
-        target = self.df.loc[idx, self.labelname]
+        file_id = self.file[idx]
+        target = self.label[idx]
         
         target_tensor = torch.tensor(target, dtype=torch.long)
         
