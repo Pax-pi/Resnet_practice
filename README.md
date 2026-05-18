@@ -35,5 +35,5 @@ In the current MVP stage (Phase 1), the model achieves near-zero training loss w
 - [x] Include a `seed_everything` function in `main.py` to ensure reproducibility.
 - [ ] Add argparse for setting parameters from the outside.
 - [ ] Re-integrate data augmentations (via `Albumentations`) into `dataset.py` to disrupt pixel-level memorization.
-- [ ] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.
+- [x] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.
 - [ ] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
