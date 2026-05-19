@@ -48,6 +48,8 @@ val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle 
 
 model, optimizer, scheduler, criterion = setup_trainer(device=device)
 
+print('Start training……')
+
 best_val_acc = 0.0
 best_val_recall = 0.0
 
