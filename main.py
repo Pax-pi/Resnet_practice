@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from pathlib import Path
 from utils import seed_everything, seed_worker
+import albumentations as A
 import torch
 import time
 import pandas as pd
@@ -25,14 +26,22 @@ seed_everything(global_seed)
 g = torch.Generator()
 g.manual_seed(global_seed)
 
+train_transform = A.Compose([
+    A.HorizontalFlip(p=0.5),
+    A.Affine(translate_percent=(-0.05, 0.05), scale=(0.95, 1.05), rotate=(-10, 10), p=0.5),
+    A.RandomBrightnessContrast(brightness_limit=0.15, contrast_limit=0.15, p=0.5),
+    A.CoarseDropout(num_holes_range=(1, 4), hole_height_range=(8, 32), hole_width_range=(8, 32), fill=0, p=0.5),
+])
+val_transform = None
+
 label_sheet = pd.read_csv('../data/rsna/stage_2_train_labels.csv')
 img_dir = Path('../data/rsna/stage_2_train_images')
 df_unique = label_sheet.groupby(featurename, as_index=False)[labelname].max()
 
 train, validation = train_test_split(df_unique, random_state=42, stratify=df_unique[labelname])
 
-train_dataset = ResNetDataset(df=train, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True)
-val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True)
+train_dataset = ResNetDataset(df=train, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True, transform=train_transform)
+val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featurename, labelname=labelname, dcm=True, grey=True, transform=val_transform)
 
 train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True, worker_init_fn=seed_worker, generator=g)
 val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True,  worker_init_fn=seed_worker)
