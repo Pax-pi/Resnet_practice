@@ -53,6 +53,8 @@ print('Start training……')
 best_val_acc = 0.0
 best_val_recall = 0.0
 best_val_loss = float('inf')
+patience_counter = 0
+early_stop_patience = 8
 
 for epoch in range(num_epochs):
     start_time = time.time()
@@ -77,6 +79,12 @@ for epoch in range(num_epochs):
         patience_counter = 0
         torch.save(model.state_dict(), 'best_model.pth')
         print(f'New record! Saving weights. Val Loss: {val_loss:.4f} | Validation Recall: {val_recall:.2f}%')
+    else:
+        patience_counter += 1
+        print(f'No Val Loss improvement, early stop counter : {patience_counter}/{early_stop_patience}')
+        if patience_counter >= early_stop_patience:
+            print("Early Stopping.")
+            break
     scheduler.step(val_loss)
     current_lr = optimizer.param_groups[0]['lr']
     print(f"Current Learning rate: {current_lr}")
