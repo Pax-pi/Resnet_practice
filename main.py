@@ -31,7 +31,7 @@ train_transform = A.Compose([
     A.Affine(translate_percent=(-0.05, 0.05), scale=(0.95, 1.05), rotate=(-10, 10), p=0.5),
     A.RandomBrightnessContrast(brightness_limit=0.15, contrast_limit=0.15, p=0.5),
     A.CoarseDropout(num_holes_range=(1, 4), hole_height_range=(8, 32), hole_width_range=(8, 32), fill=0, p=0.5),
-])
+], seed=global_seed)
 val_transform = None
 
 label_sheet = pd.read_csv('../data/rsna/stage_2_train_labels.csv')
