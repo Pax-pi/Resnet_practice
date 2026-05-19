@@ -17,7 +17,7 @@ def setup_trainer(
     resnet_model.fc = nn.Sequential(nn.Dropout(p=0.5), nn.Linear(num_ftrs, 2)) # type: ignore
     resnet_model = resnet_model.to(device)
     optimizer = optim.AdamW(resnet_model.parameters(), lr=lr, weight_decay=weight_decay)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode=scheduler_mode, factor=0.5, patience=4)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode=scheduler_mode, factor=0.5, patience=2)
     if class_weights is not None:
         criterion = nn.CrossEntropyLoss(weight=class_weights)
     else:
