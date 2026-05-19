@@ -52,6 +52,7 @@ print('Start training……')
 
 best_val_acc = 0.0
 best_val_recall = 0.0
+best_val_loss = float('inf')
 
 for epoch in range(num_epochs):
     start_time = time.time()
@@ -70,12 +71,12 @@ for epoch in range(num_epochs):
           f'Training Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | ',
           f'Validation Accuracy: {val_accuracy:.2f}% | Validation Recall: {val_recall:.2f}%'
          )
-    if val_accuracy > 75.0:
-        if val_recall > best_val_recall:
-            best_val_recall = val_recall
-            best_val_acc = val_accuracy
-            torch.save(model.state_dict(), 'best_model.pth')
-            print(f'New Record! Saving weights | accuracy: {val_accuracy:.2f}% | recall: {val_recall:.2f}%')
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
+        best_val_acc = val_accuracy
+        patience_counter = 0
+        torch.save(model.state_dict(), 'best_model.pth')
+        print(f'New record! Saving weights. Val Loss: {val_loss:.4f} | Validation Recall: {val_recall:.2f}%')
     scheduler.step(val_loss)
     current_lr = optimizer.param_groups[0]['lr']
     print(f"Current Learning rate: {current_lr}")
