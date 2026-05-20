@@ -46,7 +46,19 @@ val_dataset = ResNetDataset(df=validation, image_dir=img_dir, featurename=featur
 train_loader = DataLoader(dataset = train_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True, worker_init_fn=seed_worker, generator=g)
 val_loader = DataLoader(dataset = val_dataset, batch_size = batch_size, shuffle = True, num_workers=num_workers, pin_memory=True,  worker_init_fn=seed_worker)
 
-model, optimizer, scheduler, criterion = setup_trainer(device=device)
+N_total = len(train)
+N_0 = len(train[train['Target']==0])
+N_1 = len(train[train['Target']==1])
+
+C = 2
+W_0 = N_total / (C * N_0)
+W_1 = N_total / (C * N_1)
+
+print(f"Computed class weights -> Class 0: {W_0:.4f}, Class 1: {W_1:.4f}")
+
+class_weights = torch.tensor([W_0, W_1], dtype = torch.float32).to(device)
+
+model, optimizer, scheduler, criterion = setup_trainer(device=device, class_weights=class_weights)
 
 print('Start training……')
 

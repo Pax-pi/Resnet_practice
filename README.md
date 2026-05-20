@@ -37,5 +37,5 @@ In the current MVP stage (Phase 1), the model achieves near-zero training loss w
 - [ ] Add argparse for setting parameters from the outside.
 - [x] Re-integrate data augmentations (via `Albumentations`) into `main.py` to disrupt pixel-level memorization.
 - [x] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.
-- [ ] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
+- [x] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
 - [ ] Implement layer-freezing mechanics (e.g., freeze early ResNet blocks) to leverage stable transfer learning features and mitigate representation drift.
