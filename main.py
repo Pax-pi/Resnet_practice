@@ -66,7 +66,7 @@ best_val_acc = 0.0
 best_val_recall = 0.0
 best_val_loss = float('inf')
 patience_counter = 0
-early_stop_patience = 8
+early_stop_patience = 4
 
 for epoch in range(num_epochs):
     start_time = time.time()
