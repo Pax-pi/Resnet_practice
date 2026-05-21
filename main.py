@@ -11,13 +11,19 @@ import torch
 import time
 import pandas as pd
 
+#Hyperparameters
 num_epochs = 12
-featurename = 'patientId'
-labelname = 'Target'
 batch_size = 128
 num_workers = 4
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 global_seed = 42
+early_stop_patience = 4
+lr = 1e-4
+weight_decay = 1e-4
+
+#fixed parameters
+featurename = 'patientId'
+labelname = 'Target'
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 #legacy code, do not use
 #label_sheet, img_dir = data_setup(env='colab', data_type='competition', kaggle_dir='rsna-pneumonia-detection-challenge', df_dir='stage_2_train_labels.csv', img_dir='stage_2_train_images')
@@ -58,7 +64,7 @@ print(f"Computed class weights -> Class 0: {W_0:.4f}, Class 1: {W_1:.4f}")
 
 class_weights = torch.tensor([W_0, W_1], dtype = torch.float32).to(device)
 
-model, optimizer, scheduler, criterion = setup_trainer(device=device, class_weights=class_weights)
+model, optimizer, scheduler, criterion = setup_trainer(device=device, class_weights=class_weights, lr=lr, weight_decay=weight_decay)
 
 print('Start training……')
 
@@ -66,7 +72,6 @@ best_val_acc = 0.0
 best_val_recall = 0.0
 best_val_loss = float('inf')
 patience_counter = 0
-early_stop_patience = 4
 
 for epoch in range(num_epochs):
     start_time = time.time()
