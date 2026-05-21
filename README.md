@@ -29,11 +29,13 @@ In the current MVP stage (Phase 1), the model achieves near-zero training loss w
 1. **Absence of Data Augmentation:** To validate the script-based E2E pipeline rapidly, `Albumentations` (rotation, cropping, contrast adjustments) were temporarily bypassed. Consequently, the over-parameterized ResNet-18 model memorizes pixel layouts rather than learning generalizable lung opacities.
 2. **Unaddressed Class Imbalance:** The RSNA dataset features a heavily skewed distribution towards non-pneumonia classes. The omission of `class_weights` in the `CrossEntropyLoss` function during Stage 1 accelerates majority-class memorization.
 3. **Confounding Artifacts (Shortcut Learning):** Unlike curated pediatric pneumonia datasets, the RSNA clinical dataset contains numerous clinical artifacts (e.g., chest tubes, portable X-ray markers). Without aggressive regularization and transformations, ResNet-18 latches onto these confounding variables as shortcuts for classification.
+4. **Unconstrained Backbone Fine-Tuning:** Updating all weights of the pre-trained ResNet-18 backbone simultaneously allowed early convolutional layers to overwrite robust, generic feature extractors (e.g., ImageNet-learned edges and textures) with task-specific clinical noise.
 
 **Next Immediate Actions (Phase 2):**
 - [x] Implement a robust `setup_data.sh` to fully automate Kaggle API downloads and decouple data preparation from the Python runtime.
 - [x] Include a `seed_everything` function in `main.py` to ensure reproducibility.
 - [ ] Add argparse for setting parameters from the outside.
-- [ ] Re-integrate data augmentations (via `Albumentations`) into `dataset.py` to disrupt pixel-level memorization.
+- [x] Re-integrate data augmentations (via `Albumentations`) into `main.py` to disrupt pixel-level memorization.
 - [x] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.
-- [ ] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
+- [x] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
+- [x] Implement layer-freezing mechanics (e.g., freeze early ResNet blocks) to leverage stable transfer learning features and mitigate representation drift.

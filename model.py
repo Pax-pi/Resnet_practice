@@ -13,11 +13,18 @@ def setup_trainer(
 )-> tuple[nn.Module, optim.Optimizer, optim.lr_scheduler.LRScheduler, nn.Module]:
     '''Config a resnet18 model, and return it. Can be replace by more complex function later.'''
     resnet_model = models.resnet18(weights='DEFAULT')
+    for param in resnet_model.parameters():
+        param.requires_grad = False
+    for param in resnet_model.layer3.parameters():
+        param.requires_grad = True
+    for param in resnet_model.layer4.parameters():
+        param.requires_grad = True
     num_ftrs = resnet_model.fc.in_features
     resnet_model.fc = nn.Sequential(nn.Dropout(p=0.5), nn.Linear(num_ftrs, 2)) # type: ignore
     resnet_model = resnet_model.to(device)
-    optimizer = optim.AdamW(resnet_model.parameters(), lr=lr, weight_decay=weight_decay)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode=scheduler_mode, factor=0.5, patience=4)
+    trainable_params = filter(lambda p: p.requires_grad, resnet_model.parameters())
+    optimizer = optim.AdamW(trainable_params, lr=lr, weight_decay=weight_decay)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode=scheduler_mode, factor=0.5, patience=2)
     if class_weights is not None:
         criterion = nn.CrossEntropyLoss(weight=class_weights)
     else:
