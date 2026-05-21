@@ -10,15 +10,28 @@ import albumentations as A
 import torch
 import time
 import pandas as pd
+import argparse
+
+parser = argparse.ArgumentParser(description='A modular, end-to-end PyTorch training pipeline for pneumonia detection using the RSNA dataset')
+
+parser.add_argument('-b', '--batch-size', type=int, default=128, help='The batch size of training')
+parser.add_argument('-w', '--num-workers', type=int, default=2, help='The worker process number for dataloader')
+parser.add_argument('-e', '--num-epochs', type=int, default=12, help='The number of epochs for the training loop')
+parser.add_argument('-l', '--learning-rate', type=float, default=1e-4, help='The learning rate of the optimizer')
+parser.add_argument('-d', '--weight-decay', type=float, default=1e-4, help='The weight decay paramter for the scheduler')
+parser.add_argument('-p', '--patience', type=int, default=4, help='The patience for the early stop mechanics')
+parser.add_argument('-s', '--seed', type=int, default=42, help='The global seed for the script')
+
+args = parser.parse_args()
 
 #Hyperparameters
-num_epochs = 12
-batch_size = 128
-num_workers = 4
-global_seed = 42
-early_stop_patience = 4
-lr = 1e-4
-weight_decay = 1e-4
+num_epochs = args.num_epochs
+batch_size = args.batch_size
+num_workers = args.num_workers
+global_seed = args.seed
+early_stop_patience = args.patience
+lr = args.learning_rate
+weight_decay = args.weight_decay
 
 #fixed parameters
 featurename = 'patientId'

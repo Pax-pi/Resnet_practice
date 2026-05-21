@@ -34,7 +34,7 @@ In the current MVP stage (Phase 1), the model achieves near-zero training loss w
 **Next Immediate Actions (Phase 2):**
 - [x] Implement a robust `setup_data.sh` to fully automate Kaggle API downloads and decouple data preparation from the Python runtime.
 - [x] Include a `seed_everything` function in `main.py` to ensure reproducibility.
-- [ ] Add argparse for setting parameters from the outside.
+- [x] Add argparse for setting parameters from the outside.
 - [x] Re-integrate data augmentations (via `Albumentations`) into `main.py` to disrupt pixel-level memorization.
 - [x] Refactor `dataset.py` to eliminate Pandas `.loc` bottlenecks in the `__getitem__` method for optimal GPU utilization.
 - [x] Introduce dynamic `class_weights` and Early Stopping mechanisms to enforce proper generalization.
