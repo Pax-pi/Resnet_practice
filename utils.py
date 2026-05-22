@@ -25,9 +25,9 @@ def seed_everything(seed: int=42) -> None:
     os.environ['PYTHONHASHSEED'] = str(seed)
     
 def seed_worker(worker_id):
-    """
+    '''
     DataLoader worker initializing function.
-    """
+    '''
     worker_seed = torch.initial_seed() % 2**32
     np.random.seed(worker_seed)
     random.seed(worker_seed)
